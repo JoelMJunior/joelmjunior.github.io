@@ -1,0 +1,10 @@
+---
+title: "About"
+---
+
+Olá. Sou aluno de Estatística da Universidade Federal de Uberlândia.
+
+
+```{r}
+1 + 1
+```

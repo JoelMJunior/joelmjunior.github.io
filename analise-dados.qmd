@@ -1,0 +1,14 @@
+---
+title: "Análise de dados"
+listing:
+  contents: 
+    - "/superliga_21-22.qmd"
+  type: default
+  image-align: left
+  grid-item-border: true
+---
+::: {#cover-analise-dados}
+![](analise-dados.jpeg)
+:::
+
+Projetos desenvolvidos em R para análise de dados.

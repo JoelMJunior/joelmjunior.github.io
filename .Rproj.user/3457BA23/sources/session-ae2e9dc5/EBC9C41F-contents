@@ -1,0 +1,13 @@
+/* css styles */
+
+#cover-analise-dados {
+  display: none;
+}
+
+#cover-front-end {
+  display: none;
+}
+
+#cover-unity {
+  display: none;
+}

@@ -1,0 +1,291 @@
+---
+title: "Superliga de Vôlei Feminino 2021-2022"
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE, echo=FALSE}
+if(!require(dplyr))
+  install.packages("dplyr")
+if(!require(ggplot2))
+  install.packages("ggplot2")
+if(!require(DT))
+  install.packages("DT")
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(rmarkdown)
+```
+
+# Dados das partidas da temporada 2021/2022
+
+```{r, echo=FALSE}
+SL_2122 <- read.csv("superliga_202122.csv")
+paged_table(SL_2122)
+```
+
+-   Foram analisadas todas as partidas da Superliga:
+
+```{r, echo=FALSE}
+nPartidas <- max(SL_2122$Jogo)
+nPartidas
+```
+
+-   Os jogos são divididos em duas fases:
+
+```{r, echo=FALSE}
+unique(SL_2122$Fase)
+```
+
+```{r, echo=FALSE}
+SL_Fases <- group_by(SL_2122, Fase)
+```
+
+```{r, echo=FALSE}
+tb_fases <- reframe(SL_Fases,
+                    Jogos = (max(Jogo) - min(Jogo)) + 1,
+                    Equipes = length(unique(Time)),
+                    Jogadoras = length(unique(Jogadora)))
+kable(tb_fases)
+```
+
+```{r, echo=FALSE}
+pie(tb_fases$Jogos, labels = tb_fases$Fase, main = "Fases da competição (jogos)")
+```
+
+```{r, echo=FALSE}
+nEquipes <- length(unique(SL_2122$Time))
+nJogadoras <- length(unique(SL_2122$Jogadora))
+```
+
+## ANÁLISE DE SAQUES (Saques errados e aces)
+
+### Saques Errados (total)
+
+```{r, echo=FALSE}
+tb_saquesErr <- reframe(SL_2122,
+                        saquesErradosTotal = sum(SL_2122$Serviço.Err, na.rm = T),
+                        mediaSaqErrPartida = saquesErradosTotal/nPartidas)
+colnames(tb_saquesErr) <- c("Saques errados total", "Saques errados/partida")
+kable(tb_saquesErr)
+```
+
+### Saques Errados (por fase)
+
+```{r, echo=FALSE}
+tb_saqErrFases <- reframe(SL_Fases,
+                          saquesErrados = sum(Serviço.Err, na.rm = T),
+                          mediaSaqErrPartida = saquesErrados / ((max(Jogo) - min(Jogo)) + 1),
+                          mediaSaqErrTime = saquesErrados / length(unique(Time)),
+                          mediaSaqErrJogadora = saquesErrados / length(unique(Jogadora)))
+colnames(tb_saqErrFases) <- c("Fase", "Saques errados", "Saques err./partida", "Saques err./time", "Saques err./jogadora")
+kable(tb_saqErrFases)
+```
+
+```{r, echo=FALSE}
+SL_TimexFase <- group_by(SL_Fases, Fase, Time)
+```
+
+### Saques Errados (por time na fase Classificatória)
+
+```{r}
+tb_saqTime <- reframe(SL_TimexFase,
+                      saquesErrados = sum(Serviço.Err, na.rm = T),
+                      mediaSaqErrPartida = saquesErrados/22) %>%
+              filter(Fase == 'classificatoria') %>%
+              select(-Fase) %>%
+              arrange(desc(saquesErrados))
+tb_saqTime <- transform(tb_saqTime, Time = reorder(Time, -saquesErrados))
+colnames(tb_saqTime) <- c("Time", "Saques errados", "Saques err./partida")
+kable(tb_saqTime)
+```
+
+```{r, echo=FALSE}
+ggplot(tb_saqTime, aes(x = Time, y = `Saques errados`)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(title = "Saques errados por time (Classificatória)", x = "Times", y = "Saques errados") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+```
+
+```{r, echo=FALSE}
+boxplot(tb_saqTime$`Saques errados`)
+```
+
+```{r, echo=FALSE}
+SL_Jogadora <- group_by(SL_2122, Jogadora, Time)
+```
+
+### Saques Errados (por jogadora em toda a competição)
+
+```{r}
+tb_saqErrJogadora <- reframe(SL_Jogadora,
+                             saquesErrados = sum(Serviço.Err, na.rm = T),
+                             partidas = n(),
+                             mediaSaqErrPartida = saquesErrados/partidas) %>%
+                     #filter(Time %in% 'DENTIL PRAIA CLUBE') %>%
+                     filter(saquesErrados > 20) %>%
+                     arrange(desc(saquesErrados))
+colnames(tb_saqErrJogadora) <- c("Jogadora", "Time", "Saques errados", "Partidas", "Saques err./partida")
+paged_table(tb_saqErrJogadora)
+```
+
+```{r, echo=FALSE}
+boxplot(tb_saqErrJogadora$`Saques errados`)
+```
+
+## Aces - Pontos de saque (total)
+
+```{r, echo=FALSE}
+tb_acesTotal <- reframe(SL_2122,
+                        acesTotal = sum(SL_2122$Serviço.Ace, na.rm = T),
+                        mediaAcesPartida = acesTotal/nPartidas)
+colnames(tb_acesTotal) <- c("Aces total", "Aces/partida")
+kable(tb_acesTotal)
+```
+
+### Aces (por fase)
+
+```{r, echo=FALSE}
+tb_acesFases <- reframe(SL_Fases,
+                   aces = sum(Serviço.Ace, na.rm = T),
+                   mediaAcesPartida = aces / ((max(Jogo) - min(Jogo)) + 1),
+                   mediaAcesTime = aces / length(unique(Time)),
+                   mediaAcesJogadora = aces / length(unique(Jogadora)))
+colnames(tb_acesFases) <- c("Fase", "Aces", "Aces/partida", "Aces/time", "Aces/jogadora")
+kable(tb_acesFases)
+```
+
+### Aces (por time na fase Classificatória)
+
+```{r, echo=FALSE}
+tb_aceTime <- reframe(SL_TimexFase,
+                      aces = sum(Serviço.Ace, na.rm = T),
+                      mediaAces = aces/22) %>%
+              filter(Fase == 'classificatoria') %>%
+              select(-Fase) %>%
+              arrange(desc(aces))
+tb_aceTime <- transform(tb_aceTime, Time = reorder(Time, -aces))
+colnames(tb_aceTime) <- c("Time", "Aces", "Aces/partida")
+kable(tb_aceTime)
+```
+
+```{r, echo=FALSE}
+ggplot(tb_aceTime, aes(x = Time, y = Aces)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(title = "Aces por time (Classificatória)", x = "Times", y = "Aces") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+```
+
+```{r, echo=FALSE}
+boxplot(tb_aceTime$Aces)
+```
+
+### Aces (por jogadora em toda a competição)
+
+```{r, echo=FALSE}
+tb_aceJogadora <- reframe(SL_Jogadora,
+                          aces = sum(Serviço.Ace, na.rm = T),
+                          partidas = n(),
+                          mediaAcePartida = aces/partidas) %>%
+                  #filter(Time %in% 'DENTIL PRAIA CLUBE') %>%
+                  filter(aces > 10) %>%
+                  arrange(desc(aces))
+colnames(tb_aceJogadora) <- c("Jogadora", "Time", "Aces", "Partidas", "Aces/partida")
+paged_table(tb_aceJogadora)
+```
+
+```{r, echo=FALSE}
+boxplot(tb_aceJogadora$Aces)
+```
+
+### Aces e saques errados (por time em toda a competição)
+
+```{r, echo=FALSE}
+SL_Time <- group_by(SL_2122, Time)
+```
+
+```{r, echo=FALSE}
+#Apenas para verificar que existem partidas faltando, como as partidas 8 e 77, por exemplo.
+SL_Jogo <- group_by(SL_2122, Jogo, Partida)
+reframe(SL_Jogo)
+```
+
+```{r, echo=FALSE}
+tb_aceSaqErrTime <- reframe(SL_Time,
+                        aces = sum(Serviço.Ace, na.rm = T),
+                        saquesErrados = sum(Serviço.Err, na.rm = T),
+                        saqErr_Ace = saquesErrados / aces,
+                        saldo = aces - saquesErrados) %>%
+                arrange(saqErr_Ace)
+colnames(tb_aceSaqErrTime) <- c("Time", "Aces", "Saques errados", "Saques err./ace", "Saldo")
+kable(tb_aceSaqErrTime)
+```
+
+### Aces e saques errados (por jogadora em toda a competição)
+
+```{r}
+tb_aceSaqErrJog <- reframe(SL_Jogadora,
+                           aces = sum(Serviço.Ace, na.rm = T),
+                           saquesErrados = sum(Serviço.Err, na.rm = T),
+                           saqErr_Ace = saquesErrados / aces,
+                           saldo = aces - saquesErrados) %>%
+                   filter(aces > 10) %>%
+                   arrange(desc(aces))
+colnames(tb_aceSaqErrJog) <- c("Jogadora", "Time", "Aces", "Saques errados", "Saques err./ace", "Saldo")
+datatable(tb_aceSaqErrJog, options = list(order = list(3, 'desc')))
+```
+
+### Aces e saques errados (por categoria da fase da competição)
+
+```{r, echo=FALSE}
+SL_Cat <- group_by(SL_2122, Cat)
+```
+
+```{r, echo=FALSE}
+tb_aceSaqErrCat <- reframe(SL_Cat,
+                           aces = sum(Serviço.Ace, na.rm = T),
+                           saquesErrados = sum(Serviço.Err, na.rm = T),
+                           saqErr_Ace = saquesErrados / aces) %>%
+                   arrange(desc(aces))
+colnames(tb_aceSaqErrCat) <- c("Categoria", "Aces", "Saques errados", "Saques err./ace")
+kable(tb_aceSaqErrCat)
+```
+
+### Semifinal
+
+```{r, echo=FALSE}
+SL_2122 %>%
+  group_by(Jogo, Time, Vencedor) %>%
+  filter(Cat == 'semi') %>%
+  reframe(aces = sum(Serviço.Ace, na.rm = T),
+          saquesErrados = sum(Serviço.Err, na.rm = T),
+          saqErr_Ace = saquesErrados / aces,
+          saldo = aces - saquesErrados)
+```
+
+### Final
+
+```{r, echo=FALSE}
+SL_Cat %>%
+  group_by(Cat, Time) %>%
+  reframe(aces = sum(Serviço.Ace, na.rm = T),
+          saquesErrados = sum(Serviço.Err, na.rm = T),
+          saqErr_Ace = saquesErrados / aces,
+          saldo = aces - saquesErrados) %>%
+  filter(Cat == 'final') %>%
+  arrange(desc(aces))
+```
+
+### Quem foi o time vencedor?
+
+### Qual a relação entre essas variáveis de saque e o vencedor da partida?
+
+#### Troféu Viva-Volêi (Melhor jogadora da partida)
+
+```{r, echo=FALSE}
+reframe(SL_Jogadora,
+        trofeu = sum(VV, na.rm = T)) %>%
+  arrange(desc(trofeu))
+```

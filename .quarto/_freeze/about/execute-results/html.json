@@ -1,0 +1,16 @@
+{
+  "hash": "158dd829ebc6ce6c3767aec6eca08258",
+  "result": {
+    "markdown": "---\ntitle: \"About\"\n---\n\n\nOlá. Sou aluno de Estatística da Universidade Federal de Uberlândia.\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n1 + 1\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 2\n```\n:::\n:::\n",
+    "supporting": [
+      "about_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

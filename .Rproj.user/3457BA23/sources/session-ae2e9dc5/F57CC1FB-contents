@@ -1,0 +1,51 @@
+---
+title: "Programação web front-end"
+---
+
+::: {#cover-front-end}
+![](front-end.jpg)
+:::
+
+Sites criados com apenas HTML, CSS e Javascript.
+
+## Manual de xadrez
+
+Meu primeiro projeto front-end autoral. No projeto utilizei apenas HTML e CSS. As animações foram feitas apenas com CSS.
+
+![](manual-xadrez.png)
+
+<a href="https://joelmjunior.github.io/manual-xadrez/">
+
+::: {.d-grid .gap-2}
+<button class="btn btn-lg btn-primary" type="button">Acessar</button>
+:::
+
+</a>
+
+## Cebolês
+
+Projeto front-end que traduz do português para o cebolês, a língua do personagem Cebolinha. No projeto é utilizado apenas HTML, CSS e Javascript.
+
+![](ceboles.png)
+
+<a href="https://joelmjunior.github.io/ceboles">
+
+::: {.d-grid .gap-2}
+<button class="btn btn-lg btn-primary" type="button">Acessar</button>
+:::
+
+</a>
+
+## Super Trunfo
+
+Projeto front-end do jogo Super Trunfo que consome a API: (link da api). Um jogador escolhe uma característica. O jogador com a carta de maior valor ganha as outras cartas. Além da API, nesse projeto utilizei apenas HTML, CSS e Javascript. A parte visual ainda não está completa.
+
+![](super-trunfo.png)
+
+<a href="https://joelmjunior.github.io/super-trunfo/">
+
+::: {.d-grid .gap-2}
+<button class="btn btn-lg btn-primary" type="button">Acessar</button>
+:::
+
+</a>

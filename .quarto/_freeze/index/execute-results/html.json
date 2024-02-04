@@ -1,0 +1,14 @@
+{
+  "hash": "caa0ef30a777ba85d2e16a9f381c4df8",
+  "result": {
+    "markdown": "---\ntitle: \"Portfólio\"\n---\n\n\nBem-vindo ao meu portfólio. Espero que goste.\n\n## Manual de xadrez\n\n\n---\nimage: manual-xadrez.png\n---\n\n::: {.cell}\n\n```{.r .cell-code}\n1 + 1\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 2\n```\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

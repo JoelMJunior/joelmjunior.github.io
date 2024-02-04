@@ -1,0 +1,12 @@
+---
+title: "Portfólio"
+listing: 
+  contents: 
+    - "/front-end.qmd"
+    - "/analise-dados.qmd"
+    - "/unity.qmd"
+  type: grid
+  sort: false
+---
+
+Bem-vindo ao meu portfólio. Aqui você encontrará alguns dos meus projetos de programação e análise de dados. As linguagens mais utilizadas nesses projetos são Javascript, C# e R. Espero que goste.

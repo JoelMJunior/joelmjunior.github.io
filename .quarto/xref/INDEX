@@ -1,0 +1,26 @@
+{
+  "index.qmd": {
+    "index.html": "d6e3fed8"
+  },
+  "about.qmd": {
+    "about.html": "c6fc453e"
+  },
+  "porfolio.qmd": {
+    "porfolio.html": "2ba02942"
+  },
+  "prog-web.qmd": {
+    "prog-web.html": "b49be64a"
+  },
+  "front-end.qmd": {
+    "front-end.html": "c822e88a"
+  },
+  "analise-dados.qmd": {
+    "analise-dados.html": "7c9298eb"
+  },
+  "unity.qmd": {
+    "unity.html": "3204d3fc"
+  },
+  "superliga_21-22.qmd": {
+    "superliga_21-22.html": "7e5e2310"
+  }
+}

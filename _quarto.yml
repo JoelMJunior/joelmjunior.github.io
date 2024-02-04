@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: docs
+  
+website:
+  title: "joelmjunior"
+  navbar:
+    left:
+      - href: front-end.qmd
+        text: Front-end
+      - href: analise-dados.qmd
+        text: Análise de dados
+      - href: unity.qmd
+        text: Projetos Unity 
+      - href: about.qmd
+        text: Sobre mim
+
+format:
+  html:
+    theme: journal
+    css: styles.css
+    toc: true
+    lang: pt
+    link-external-newwindow: true
+    smooth-scroll: true
+
+editor: source
+
